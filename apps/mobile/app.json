@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "Crafted MFG",
+    "slug": "crafted-mfg",
+    "version": "0.1.0",
+    "scheme": "craftedmfg",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "bundleIdentifier": "com.craftedmfg.app",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.craftedmfg.app"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Crafted MFG uses your photo library so you can attach product photos to hat styles and variants.",
+          "cameraPermission": "Crafted MFG uses the camera so you can take product photos of hat styles and variants."
+        }
+      ],
+      ["expo-notifications"],
+      "expo-splash-screen"
+    ],
+    "experiments": {
+      "tsconfigPaths": true
+    }
+  }
+}
