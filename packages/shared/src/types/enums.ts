@@ -14,7 +14,7 @@ export const PO_STATUSES = [
 ] as const;
 export type PoStatus = (typeof PO_STATUSES)[number];
 
-export const CARRIERS = ["ups", "dhl"] as const;
+export const CARRIERS = ["ups", "fedex", "dhl"] as const;
 export type Carrier = (typeof CARRIERS)[number];
 
 export const SHIPMENT_STATUSES = [
@@ -46,6 +46,7 @@ export const ROLE_LABELS: Record<UserRole, string> = {
 
 export const CARRIER_LABELS: Record<Carrier, string> = {
   ups: "UPS",
+  fedex: "FedEx",
   dhl: "DHL",
 };
 

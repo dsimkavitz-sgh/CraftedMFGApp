@@ -24,6 +24,7 @@ import { ErrorAlert } from "@/components/ui/Alert";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProductThumb } from "@/components/ProductThumb";
 import { AdjustInventoryModal, type AdjustTarget } from "@/components/AdjustInventoryModal";
+import { BarcodeLabelModal, type LabelTarget } from "@/components/BarcodeLabelModal";
 
 function HistoryModal({ item, onClose }: { item: InventoryListItem; onClose: () => void }) {
   const supabase = getSupabaseBrowserClient();
@@ -87,6 +88,7 @@ export function InventoryPage() {
   );
 
   const [adjustTarget, setAdjustTarget] = useState<AdjustTarget | null>(null);
+  const [labelTarget, setLabelTarget] = useState<LabelTarget | null>(null);
   const [historyItem, setHistoryItem] = useState<InventoryListItem | null>(null);
 
   function applyAdjustedQty(variantId: string, newQty: number) {
@@ -216,6 +218,20 @@ export function InventoryPage() {
                           <Button variant="ghost" size="sm" onClick={() => setHistoryItem(item)}>
                             History
                           </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() =>
+                              setLabelTarget({
+                                sku: item.sku,
+                                styleName: item.style?.name,
+                                color: item.color,
+                                size: item.size,
+                              })
+                            }
+                          >
+                            Label
+                          </Button>
                           {can.adjustInventory(role) ? (
                             <Button
                               variant="secondary"
@@ -253,6 +269,8 @@ export function InventoryPage() {
       ) : null}
 
       {historyItem ? <HistoryModal item={historyItem} onClose={() => setHistoryItem(null)} /> : null}
+
+      {labelTarget ? <BarcodeLabelModal target={labelTarget} onClose={() => setLabelTarget(null)} /> : null}
     </div>
   );
 }

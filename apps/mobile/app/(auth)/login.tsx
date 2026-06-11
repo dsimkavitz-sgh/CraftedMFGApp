@@ -1,6 +1,7 @@
 import { signInSchema } from "@crafted/shared";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { BrandWordmark } from "@/components/BrandWordmark";
 import { Screen } from "@/components/ui/Screen";
 import { TextField } from "@/components/ui/TextField";
 import { Button } from "@/components/ui/Button";
@@ -42,14 +43,7 @@ export default function LoginScreen() {
     <Screen edges={["top", "bottom"]} keyboard>
       <View style={styles.container}>
         <View style={styles.brand}>
-          {/* Circle-C + MFG mark, matching the craftedmfg.com wordmark. */}
-          <View style={[styles.brandMark, { backgroundColor: theme.accent }]}>
-            <Text style={[styles.brandGlyph, { color: theme.accentInk }]}>C</Text>
-          </View>
-          <Text style={[styles.wordmark, { color: theme.text }]}>CRAFTED MFG</Text>
-          <Text style={[styles.tagline, { color: theme.muted }]}>
-            Inventory · Orders · Catalog
-          </Text>
+          <BrandWordmark size={44} tagline />
         </View>
 
         {banner ? (
@@ -109,27 +103,6 @@ const styles = StyleSheet.create({
   brand: {
     alignItems: "center",
     marginBottom: spacing(10),
-  },
-  brandMark: {
-    width: 84,
-    height: 84,
-    borderRadius: radius.pill,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: spacing(4),
-  },
-  brandGlyph: {
-    fontSize: 44,
-    fontWeight: "900",
-  },
-  wordmark: {
-    fontSize: 24,
-    fontWeight: "800",
-    letterSpacing: 5,
-  },
-  tagline: {
-    fontSize: 14,
-    marginTop: spacing(1),
   },
   banner: {
     borderWidth: 1,

@@ -135,8 +135,8 @@ export default function MoreScreen() {
         <Row
           theme={theme}
           icon="barcode-outline"
-          title="Scan barcode (Phase 2 preview)"
-          subtitle="See what's coming for warehouse scanning"
+          title="Scan barcode"
+          subtitle="Point the camera at a SKU label to look up a variant"
           onPress={() => router.push("/scan")}
         />
       </Card>
@@ -148,8 +148,8 @@ export default function MoreScreen() {
             <Row
               theme={theme}
               icon="sync-outline"
-              title="QuickBooks sync"
-              subtitle="Connection status and sync problems"
+              title="Admin settings"
+              subtitle="QuickBooks connection and sync log"
               onPress={() => router.push("/admin/qbo")}
             />
             <Row

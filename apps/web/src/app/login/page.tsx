@@ -1,5 +1,6 @@
 "use client";
 
+import { BrandWordmark } from "@/components/BrandWordmark";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signInSchema } from "@crafted/shared";
@@ -46,16 +47,8 @@ export default function LoginPage() {
     <div className="flex min-h-dvh items-center justify-center bg-stone-50 px-4 dark:bg-stone-950">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center gap-3">
-          {/* Circle-C + MFG mark, matching the craftedmfg.com wordmark. */}
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-stone-900 text-white shadow-sm dark:bg-stone-100 dark:text-stone-900">
-            <span className="text-2xl font-black leading-none">C</span>
-          </div>
-          <div className="text-center">
-            <h1 className="text-xl font-extrabold uppercase tracking-[0.22em] text-stone-900 dark:text-stone-100">
-              Crafted MFG
-            </h1>
-            <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">Sign in to your workspace</p>
-          </div>
+          <BrandWordmark size="lg" tagline />
+          <p className="text-sm text-stone-500 dark:text-stone-400">Sign in to your workspace</p>
         </div>
 
         <form

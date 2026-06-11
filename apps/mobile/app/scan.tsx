@@ -1,124 +1,159 @@
+import { findVariantByCode } from "@crafted/shared";
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, Text, View } from "react-native";
-import { Badge } from "@/components/ui/Badge";
+import { CameraView, useCameraPermissions, type BarcodeScanningResult } from "expo-camera";
+import { useRouter } from "expo-router";
+import { useCallback, useRef, useState } from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { Button } from "@/components/ui/Button";
 import { Screen } from "@/components/ui/Screen";
+import { errorMessage } from "@/lib/errors";
+import { supabase } from "@/lib/supabase";
 import { radius, spacing, useTheme } from "@/theme/tokens";
 
-// TODO(phase2): Barcode scanning flow.
-//   1. Add expo-camera and request camera permission on mount.
-//   2. Render CameraView with barcodeScannerSettings: { barcodeTypes: ["code128"] }.
-//   3. On scan, decode the Code128 payload (SKU or variants.barcode value).
-//   4. Look up the variant with the shared findVariantByCode(supabase, code).
-//   5. On a hit, router.replace(`/variant/${variant.id}`); on a miss, show an
-//      inline "No variant matches this code" state with a rescan button.
-//   6. Code128 barcode generation from SKUs happens server-side in Phase 2 and
-//      populates the variants.barcode column (null in MVP).
-// expo-camera is intentionally NOT a dependency yet.
+// Code128 is what we print from the web app (encodes the SKU); the rest are
+// common label formats so off-the-shelf supplier barcodes also resolve once
+// they're stored in variants.barcode.
+const BARCODE_TYPES = ["code128", "code39", "ean13", "upc_a", "qr"] as const;
+
+type ScanStatus =
+  | { kind: "scanning" }
+  | { kind: "looking_up"; code: string }
+  | { kind: "miss"; code: string };
 
 export default function ScanScreen() {
   const theme = useTheme();
+  const router = useRouter();
+  const [permission, requestPermission] = useCameraPermissions();
+  const [status, setStatus] = useState<ScanStatus>({ kind: "scanning" });
+  // Guards against the camera firing multiple results for one barcode.
+  const handlingRef = useRef(false);
+
+  const onScanned = useCallback(
+    async ({ data }: BarcodeScanningResult) => {
+      if (handlingRef.current || !data) return;
+      handlingRef.current = true;
+      const code = data.trim();
+      setStatus({ kind: "looking_up", code });
+      try {
+        const variant = await findVariantByCode(supabase, code);
+        if (variant) {
+          router.replace(`/variant/${variant.id}`);
+          return;
+        }
+        setStatus({ kind: "miss", code });
+      } catch (e) {
+        setStatus({ kind: "miss", code: errorMessage(e) });
+      }
+    },
+    [router],
+  );
+
+  const rescan = () => {
+    handlingRef.current = false;
+    setStatus({ kind: "scanning" });
+  };
+
+  if (!permission) return <Screen>{null}</Screen>;
+
+  if (!permission.granted) {
+    return (
+      <Screen>
+        <View style={styles.center}>
+          <Ionicons name="camera-outline" size={48} color={theme.muted} />
+          <Text style={[styles.title, { color: theme.text }]}>Camera access needed</Text>
+          <Text style={[styles.body, { color: theme.muted }]}>
+            Point the camera at a SKU barcode to jump straight to that variant and adjust
+            inventory on the spot.
+          </Text>
+          <Button
+            title={permission.canAskAgain ? "Allow camera" : "Open Settings to allow camera"}
+            onPress={() => void requestPermission()}
+          />
+        </View>
+      </Screen>
+    );
+  }
 
   return (
-    <Screen>
-      <View style={styles.container}>
-        <Badge label="Phase 2" tone="accent" />
-        <Text style={[styles.title, { color: theme.text }]}>Barcode scanning is coming soon</Text>
-        <Text style={[styles.body, { color: theme.muted }]}>
-          In Phase 2 you'll point the camera at a Code128 barcode to jump straight to that
-          variant's detail screen and adjust inventory on the spot.
-        </Text>
-
-        <View
-          style={[
-            styles.viewfinder,
-            { borderColor: theme.border, backgroundColor: theme.card },
-          ]}
-        >
-          <View style={[styles.corner, styles.cornerTL, { borderColor: theme.accent }]} />
-          <View style={[styles.corner, styles.cornerTR, { borderColor: theme.accent }]} />
-          <View style={[styles.corner, styles.cornerBL, { borderColor: theme.accent }]} />
-          <View style={[styles.corner, styles.cornerBR, { borderColor: theme.accent }]} />
-          <Ionicons name="barcode-outline" size={64} color={theme.muted} />
-          <Text style={[styles.viewfinderText, { color: theme.muted }]}>
-            Camera viewfinder (disabled)
-          </Text>
+    <View style={[styles.flex, styles.cameraBg]}>
+      <CameraView
+        style={styles.flex}
+        facing="back"
+        barcodeScannerSettings={{ barcodeTypes: [...BARCODE_TYPES] }}
+        onBarcodeScanned={status.kind === "scanning" ? (r) => void onScanned(r) : undefined}
+      />
+      {/* Viewfinder overlay */}
+      <View pointerEvents="box-none" style={styles.overlay}>
+        <View style={styles.frame}>
+          <View style={[styles.corner, styles.cornerTL]} />
+          <View style={[styles.corner, styles.cornerTR]} />
+          <View style={[styles.corner, styles.cornerBL]} />
+          <View style={[styles.corner, styles.cornerBR]} />
         </View>
 
-        <Text style={[styles.footnote, { color: theme.muted }]}>
-          Until then, use search on the Inventory tab to find variants by SKU.
-        </Text>
+        <View style={[styles.statusCard, { backgroundColor: theme.card }]}>
+          {status.kind === "scanning" ? (
+            <Text style={[styles.statusText, { color: theme.text }]}>
+              Center the barcode in the frame
+            </Text>
+          ) : status.kind === "looking_up" ? (
+            <View style={styles.statusRow}>
+              <ActivityIndicator size="small" color={theme.accent} />
+              <Text style={[styles.statusText, { color: theme.text }]} numberOfLines={1}>
+                Looking up {status.code}…
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.missBlock}>
+              <Text style={[styles.statusText, { color: theme.danger }]} numberOfLines={2}>
+                No variant matches “{status.code}”
+              </Text>
+              <Button title="Scan again" small onPress={rescan} />
+            </View>
+          )}
+        </View>
       </View>
-    </Screen>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  flex: { flex: 1 },
+  cameraBg: { backgroundColor: "#000000" },
+  center: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    gap: spacing(3),
-    paddingBottom: spacing(10),
+    gap: spacing(4),
+    paddingHorizontal: spacing(6),
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "800",
-    textAlign: "center",
-  },
-  body: {
-    fontSize: 15,
-    lineHeight: 22,
-    textAlign: "center",
-    paddingHorizontal: spacing(4),
-  },
-  viewfinder: {
-    width: 240,
-    height: 240,
-    borderWidth: 1,
-    borderRadius: radius.card,
+  title: { fontSize: 20, fontWeight: "800", textAlign: "center" },
+  body: { fontSize: 15, lineHeight: 22, textAlign: "center" },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
     alignItems: "center",
     justifyContent: "center",
-    gap: spacing(2),
-    marginVertical: spacing(4),
+    gap: spacing(6),
   },
-  viewfinderText: {
-    fontSize: 13,
-  },
+  frame: { width: 260, height: 180 },
   corner: {
     position: "absolute",
-    width: 28,
-    height: 28,
+    width: 30,
+    height: 30,
+    borderColor: "#ffffff",
   },
-  cornerTL: {
-    top: 10,
-    left: 10,
-    borderTopWidth: 3,
-    borderLeftWidth: 3,
-    borderTopLeftRadius: 8,
+  cornerTL: { top: 0, left: 0, borderTopWidth: 4, borderLeftWidth: 4, borderTopLeftRadius: 10 },
+  cornerTR: { top: 0, right: 0, borderTopWidth: 4, borderRightWidth: 4, borderTopRightRadius: 10 },
+  cornerBL: { bottom: 0, left: 0, borderBottomWidth: 4, borderLeftWidth: 4, borderBottomLeftRadius: 10 },
+  cornerBR: { bottom: 0, right: 0, borderBottomWidth: 4, borderRightWidth: 4, borderBottomRightRadius: 10 },
+  statusCard: {
+    minWidth: 260,
+    maxWidth: 320,
+    borderRadius: radius.card,
+    paddingHorizontal: spacing(4),
+    paddingVertical: spacing(3),
   },
-  cornerTR: {
-    top: 10,
-    right: 10,
-    borderTopWidth: 3,
-    borderRightWidth: 3,
-    borderTopRightRadius: 8,
-  },
-  cornerBL: {
-    bottom: 10,
-    left: 10,
-    borderBottomWidth: 3,
-    borderLeftWidth: 3,
-    borderBottomLeftRadius: 8,
-  },
-  cornerBR: {
-    bottom: 10,
-    right: 10,
-    borderBottomWidth: 3,
-    borderRightWidth: 3,
-    borderBottomRightRadius: 8,
-  },
-  footnote: {
-    fontSize: 13,
-    textAlign: "center",
-  },
+  statusRow: { flexDirection: "row", alignItems: "center", gap: spacing(2) },
+  missBlock: { alignItems: "center", gap: spacing(2) },
+  statusText: { fontSize: 14, fontWeight: "600", textAlign: "center" },
 });

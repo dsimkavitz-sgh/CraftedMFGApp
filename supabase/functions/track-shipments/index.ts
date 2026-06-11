@@ -5,6 +5,8 @@
 //  2. For each shipment not yet delivered:
 //       - UPS:  OAuth client-credentials → GET /api/track/v1/details/{tracking}
 //               TODO(creds): UPS_CLIENT_ID / UPS_CLIENT_SECRET (developer.ups.com)
+//       - FedEx: OAuth client-credentials → POST /track/v1/trackingnumbers
+//               TODO(creds): FEDEX_CLIENT_ID / FEDEX_CLIENT_SECRET (developer.fedex.com)
 //       - DHL:  GET https://api-eu.dhl.com/track/shipments?trackingNumber=...
 //               TODO(creds): DHL_API_KEY (developer.dhl.com)
 //  3. Insert new rows into shipment_events (table already exists, keyed by

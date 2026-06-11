@@ -1,3 +1,4 @@
+import { Comfortaa_700Bold, useFonts } from "@expo-google-fonts/comfortaa";
 import { Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
@@ -7,7 +8,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SessionProvider, useSession } from "@/lib/auth";
 import { useTheme } from "@/theme/tokens";
 
-// Keep the splash visible until the persisted session has been restored.
+// Keep the splash visible until fonts + the persisted session are restored.
 void SplashScreen.preventAutoHideAsync();
 
 function RootNavigator() {
@@ -15,9 +16,11 @@ function RootNavigator() {
   const { session, loading } = useSession();
   const segments = useSegments();
   const router = useRouter();
+  // Brand wordmark font (see components/BrandWordmark.tsx).
+  const [fontsLoaded] = useFonts({ Comfortaa_700Bold });
 
   useEffect(() => {
-    if (loading) return;
+    if (loading || !fontsLoaded) return;
     void SplashScreen.hideAsync();
     const inAuthGroup = segments[0] === "(auth)";
     if (!session && !inAuthGroup) {
@@ -25,10 +28,10 @@ function RootNavigator() {
     } else if (session && inAuthGroup) {
       router.replace("/(tabs)");
     }
-  }, [loading, session, segments, router]);
+  }, [loading, fontsLoaded, session, segments, router]);
 
-  // Show nothing (splash stays up) until the session state is known.
-  if (loading) return null;
+  // Show nothing (splash stays up) until fonts and session state are known.
+  if (loading || !fontsLoaded) return null;
 
   return (
     <Stack
@@ -51,7 +54,7 @@ function RootNavigator() {
       <Stack.Screen name="style/new" options={{ title: "New Style", presentation: "modal" }} />
       <Stack.Screen name="style/[id]" options={{ title: "Style" }} />
       <Stack.Screen name="scan" options={{ title: "Scan Barcode", presentation: "modal" }} />
-      <Stack.Screen name="admin/qbo" options={{ title: "QuickBooks Sync" }} />
+      <Stack.Screen name="admin/qbo" options={{ title: "Admin Settings" }} />
     </Stack>
   );
 }

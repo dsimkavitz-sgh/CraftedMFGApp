@@ -54,6 +54,7 @@ import { StageStepper } from "@/components/StageStepper";
 
 const CARRIER_BADGE: Record<Carrier, string> = {
   ups: "bg-amber-950 text-amber-100",
+  fedex: "bg-purple-800 text-white",
   dhl: "bg-yellow-400 text-yellow-950",
 };
 
@@ -627,7 +628,7 @@ export function OrderDetailPage({ poId }: { poId: string }) {
               </ul>
             )}
             <p className="border-t border-stone-200 px-4 py-3 text-xs text-stone-400 dark:border-stone-800 dark:text-stone-500 sm:px-6">
-              Phase 2: live UPS/DHL tracking events will appear here automatically.
+              Phase 2: live UPS/FedEx/DHL tracking events will appear here automatically.
             </p>
           </Card>
         </div>

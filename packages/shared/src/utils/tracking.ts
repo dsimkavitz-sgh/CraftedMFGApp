@@ -6,6 +6,8 @@ export function carrierTrackingUrl(carrier: Carrier, trackingNumber: string): st
   switch (carrier) {
     case "ups":
       return `https://www.ups.com/track?tracknum=${tn}`;
+    case "fedex":
+      return `https://www.fedex.com/fedextrack/?trknbr=${tn}`;
     case "dhl":
       return `https://www.dhl.com/us-en/home/tracking.html?tracking-id=${tn}`;
   }

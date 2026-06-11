@@ -26,6 +26,7 @@ import { ProductThumb } from "@/components/ProductThumb";
 import { PhotoUpload } from "@/components/PhotoUpload";
 import { StyleForm } from "@/components/StyleForm";
 import { AdjustInventoryModal, type AdjustTarget } from "@/components/AdjustInventoryModal";
+import { BarcodeLabelModal, type LabelTarget } from "@/components/BarcodeLabelModal";
 
 function AddVariantModal({
   styleId,
@@ -113,6 +114,7 @@ export function StyleDetailPage({ styleId }: { styleId: string }) {
   const [addVariantOpen, setAddVariantOpen] = useState(false);
   const [createdSku, setCreatedSku] = useState<string | null>(null);
   const [adjustTarget, setAdjustTarget] = useState<AdjustTarget | null>(null);
+  const [labelTarget, setLabelTarget] = useState<LabelTarget | null>(null);
 
   const canEdit = can.editCatalog(role);
   const style = state.data;
@@ -248,23 +250,39 @@ export function StyleDetailPage({ styleId }: { styleId: string }) {
                             {v.inventory?.location ?? "—"}
                           </td>
                           <td className="px-4 py-2.5 text-right">
-                            {can.adjustInventory(role) ? (
+                            <div className="flex justify-end gap-2">
                               <Button
-                                variant="secondary"
+                                variant="ghost"
                                 size="sm"
                                 onClick={() =>
-                                  setAdjustTarget({
-                                    variantId: v.id,
+                                  setLabelTarget({
                                     sku: v.sku,
+                                    styleName: style.name,
                                     color: v.color,
                                     size: v.size,
-                                    qtyOnHand: qty,
                                   })
                                 }
                               >
-                                Adjust
+                                Label
                               </Button>
-                            ) : null}
+                              {can.adjustInventory(role) ? (
+                                <Button
+                                  variant="secondary"
+                                  size="sm"
+                                  onClick={() =>
+                                    setAdjustTarget({
+                                      variantId: v.id,
+                                      sku: v.sku,
+                                      color: v.color,
+                                      size: v.size,
+                                      qtyOnHand: qty,
+                                    })
+                                  }
+                                >
+                                  Adjust
+                                </Button>
+                              ) : null}
+                            </div>
                           </td>
                         </tr>
                       );
@@ -311,6 +329,8 @@ export function StyleDetailPage({ styleId }: { styleId: string }) {
           onAdjusted={(newQty) => applyAdjustedQty(adjustTarget.variantId, newQty)}
         />
       ) : null}
+
+      {labelTarget ? <BarcodeLabelModal target={labelTarget} onClose={() => setLabelTarget(null)} /> : null}
     </div>
   );
 }

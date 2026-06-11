@@ -485,7 +485,7 @@ export default function PurchaseOrderDetailScreen() {
             ) : null}
             {/* TODO(phase2): live tracking events (shipment_events via
                 listShipmentEvents) render here once the track-shipments edge
-                function starts polling UPS/DHL. */}
+                function starts polling UPS/FedEx/DHL. */}
             <Text style={[styles.phase2Note, { color: theme.muted }]}>
               Live tracking events arrive in Phase 2.
             </Text>

@@ -1,5 +1,6 @@
 "use client";
 
+import { BrandWordmark } from "@/components/BrandWordmark";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -28,7 +29,7 @@ const ICONS = {
   inventory: "M4 8h16v12H4V8Zm2-4h12l2 4H4l2-4Zm4 8h4",
   orders: "M3 7h11v10H3V7Zm11 3h4l3 3v4h-7M7.5 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z",
   suppliers: "M3 21V9l6-4v4l6-4v4l6-4v16H3Zm5 0v-4h3v4m4 0v-4h3v4",
-  qbo: "M20 12a8 8 0 1 1-2.3-5.6M20 4v4h-4",
+  settings: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm7.4-3a7.4 7.4 0 0 0-.1-1.2l2-1.5-2-3.5-2.4 1a7.4 7.4 0 0 0-2-1.2L14.5 3h-5l-.4 2.6a7.4 7.4 0 0 0-2 1.2l-2.4-1-2 3.5 2 1.5a7.5 7.5 0 0 0 0 2.4l-2 1.5 2 3.5 2.4-1a7.4 7.4 0 0 0 2 1.2l.4 2.6h5l.4-2.6a7.4 7.4 0 0 0 2-1.2l2.4 1 2-3.5-2-1.5c.06-.4.1-.8.1-1.2Z",
   users: "M16 19v-1a4 4 0 0 0-8 0v1m12 0v-1a4 4 0 0 0-3-3.9M12 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm5-1a3 3 0 0 0 0-6",
 } as const;
 
@@ -60,7 +61,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     { href: "/inventory", label: "Inventory", icon: <NavIcon d={ICONS.inventory} />, show: true },
     { href: "/orders", label: "On Order", icon: <NavIcon d={ICONS.orders} />, show: true },
     { href: "/suppliers", label: "Suppliers", icon: <NavIcon d={ICONS.suppliers} />, show: true },
-    { href: "/admin/qbo", label: "QuickBooks", icon: <NavIcon d={ICONS.qbo} />, show: can.viewQboAdmin(role) },
+    { href: "/admin/settings", label: "Settings", icon: <NavIcon d={ICONS.settings} />, show: can.manageSettings(role) },
     { href: "/admin/users", label: "Users", icon: <NavIcon d={ICONS.users} />, show: can.manageUsers(role) },
   ].filter((item) => item.show);
 
@@ -125,14 +126,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   );
 
   const brand = (
-    // Circle-C + MFG mark, matching the craftedmfg.com wordmark.
-    <div className="flex items-center gap-2.5 px-5 py-5">
-      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-stone-900 text-white dark:bg-stone-100 dark:text-stone-900">
-        <span className="text-[17px] font-black leading-none">C</span>
-      </div>
-      <span className="text-base font-extrabold uppercase tracking-[0.18em] text-stone-900 dark:text-stone-100">
-        MFG
-      </span>
+    <div className="flex items-center px-5 py-5">
+      <BrandWordmark size="sm" />
     </div>
   );
 
@@ -156,9 +151,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           >
             <NavIcon d="M4 7h16M4 12h16M4 17h16" />
           </button>
-          <span className="text-base font-semibold tracking-tight text-stone-900 dark:text-stone-100">
-            Crafted MFG
-          </span>
+          <BrandWordmark size="sm" />
         </div>
       </header>
 

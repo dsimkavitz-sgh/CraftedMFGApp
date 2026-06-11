@@ -33,7 +33,7 @@ export async function deleteShipment(supabase: SupabaseClient, id: string): Prom
 
 /**
  * Phase 2 — shipment_events is populated by the track-shipments edge
- * function polling UPS/DHL. Empty in MVP; the UI may render it when present.
+ * function polling UPS/FedEx/DHL. Empty in MVP; the UI may render it when present.
  */
 export async function listShipmentEvents(
   supabase: SupabaseClient,

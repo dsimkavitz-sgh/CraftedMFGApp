@@ -84,8 +84,8 @@ export function QboAdminPage() {
   return (
     <div>
       <PageHeader
-        title="QuickBooks Online"
-        subtitle="Connection status and the inventory sync log."
+        title="Admin settings"
+        subtitle="QuickBooks Online connection and the inventory sync log. More settings land here as they ship."
       />
 
       {actionError ? (

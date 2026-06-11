@@ -23,8 +23,16 @@
           "cameraPermission": "Crafted MFG uses the camera so you can take product photos of hat styles and variants."
         }
       ],
-      ["expo-notifications"],
-      "expo-splash-screen"
+      [
+        "expo-notifications"
+      ],
+      "expo-splash-screen",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Crafted MFG uses the camera to scan SKU barcodes for fast inventory lookups."
+        }
+      ]
     ],
     "experiments": {
       "tsconfigPaths": true
