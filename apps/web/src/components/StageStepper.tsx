@@ -5,7 +5,7 @@ import { MANUFACTURING_STAGES, STAGE_LABELS, stageIndex } from "@crafted/shared"
 /**
  * Horizontal manufacturing-stage stepper. `current` is the latest stage event
  * value (or null if production hasn't started). Completed stages get a check,
- * the current one is filled amber, future ones are muted.
+ * the current one is filled ink, future ones are muted.
  */
 export function StageStepper({ current }: { current: string | null }) {
   const currentIdx = current ? stageIndex(current) : -1;
@@ -19,13 +19,13 @@ export function StageStepper({ current }: { current: string | null }) {
         return (
           <li key={stage} className={`flex min-w-[72px] flex-col items-center ${isLast ? "" : "flex-1"}`}>
             <div className="flex w-full items-center">
-              <div className={`h-0.5 flex-1 ${i === 0 ? "bg-transparent" : i <= currentIdx ? "bg-amber-600" : "bg-stone-200 dark:bg-stone-700"}`} />
+              <div className={`h-0.5 flex-1 ${i === 0 ? "bg-transparent" : i <= currentIdx ? "bg-stone-900 dark:bg-stone-100" : "bg-stone-200 dark:bg-stone-700"}`} />
               <div
                 className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-xs font-semibold ${
                   state === "done"
-                    ? "border-amber-600 bg-amber-600 text-white"
+                    ? "border-stone-900 bg-stone-900 text-white dark:border-stone-100 dark:bg-stone-100 dark:text-stone-900"
                     : state === "current"
-                      ? "border-amber-600 bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400"
+                      ? "border-stone-900 bg-white text-stone-900 dark:border-stone-100 dark:bg-stone-900 dark:text-stone-100"
                       : "border-stone-300 bg-white text-stone-400 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-500"
                 }`}
                 aria-current={state === "current" ? "step" : undefined}
@@ -38,12 +38,12 @@ export function StageStepper({ current }: { current: string | null }) {
                   i + 1
                 )}
               </div>
-              <div className={`h-0.5 flex-1 ${isLast ? "bg-transparent" : i < currentIdx ? "bg-amber-600" : "bg-stone-200 dark:bg-stone-700"}`} />
+              <div className={`h-0.5 flex-1 ${isLast ? "bg-transparent" : i < currentIdx ? "bg-stone-900 dark:bg-stone-100" : "bg-stone-200 dark:bg-stone-700"}`} />
             </div>
             <span
               className={`mt-1.5 px-1 text-center text-[11px] leading-tight ${
                 state === "current"
-                  ? "font-semibold text-amber-700 dark:text-amber-400"
+                  ? "font-semibold text-stone-900 dark:text-stone-100"
                   : state === "done"
                     ? "font-medium text-stone-700 dark:text-stone-300"
                     : "text-stone-400 dark:text-stone-500"

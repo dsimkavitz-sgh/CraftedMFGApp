@@ -26,7 +26,7 @@ function colorsFor(theme: Palette, variant: ButtonVariant, pressed: boolean) {
     case "primary":
       return {
         bg: pressed ? theme.accentPressed : theme.accent,
-        fg: "#ffffff",
+        fg: theme.accentInk,
         border: "transparent",
       };
     case "danger":

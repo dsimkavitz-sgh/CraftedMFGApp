@@ -99,7 +99,7 @@ export function UsersAdminPage() {
                           void changeRole(user.id, user.full_name, e.target.value as UserRole)
                         }
                         aria-label={`Role for ${user.full_name}`}
-                        className="rounded-lg border border-stone-300 bg-white px-2 py-1.5 text-xs text-stone-700 focus:border-amber-500 focus:outline-none disabled:opacity-60 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-300"
+                        className="rounded-lg border border-stone-300 bg-white px-2 py-1.5 text-xs text-stone-700 focus:border-stone-500 focus:outline-none disabled:opacity-60 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-300"
                       >
                         {USER_ROLES.map((r) => (
                           <option key={r} value={r}>

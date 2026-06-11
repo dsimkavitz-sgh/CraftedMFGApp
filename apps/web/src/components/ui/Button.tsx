@@ -8,7 +8,7 @@ type Size = "sm" | "md";
 
 const VARIANT_CLASSES: Record<Variant, string> = {
   primary:
-    "bg-amber-600 text-white hover:bg-amber-500 disabled:hover:bg-amber-600 shadow-sm",
+    "bg-stone-900 text-white hover:bg-stone-700 disabled:hover:bg-stone-900 shadow-sm dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-stone-300 dark:disabled:hover:bg-stone-100",
   secondary:
     "bg-white text-stone-800 border border-stone-300 hover:bg-stone-50 dark:bg-stone-900 dark:text-stone-100 dark:border-stone-700 dark:hover:bg-stone-800",
   ghost:
@@ -42,7 +42,7 @@ export function Button({
     <button
       type={type}
       disabled={disabled || loading}
-      className={`inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 disabled:cursor-not-allowed disabled:opacity-60 ${VARIANT_CLASSES[variant]} ${SIZE_CLASSES[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-500 disabled:cursor-not-allowed disabled:opacity-60 ${VARIANT_CLASSES[variant]} ${SIZE_CLASSES[size]} ${className}`}
       {...rest}
     >
       {loading ? <Spinner size="sm" /> : null}

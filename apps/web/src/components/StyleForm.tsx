@@ -101,7 +101,7 @@ export function StyleForm({
           type="checkbox"
           checked={active}
           onChange={(e) => setActive(e.target.checked)}
-          className="h-4 w-4 rounded border-stone-300 text-amber-600 focus:ring-amber-500 dark:border-stone-700"
+          className="h-4 w-4 rounded border-stone-300 text-stone-900 focus:ring-stone-500 dark:border-stone-700"
         />
         Active (visible in the catalog by default)
       </label>

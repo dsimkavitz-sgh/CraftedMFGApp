@@ -41,7 +41,7 @@ export function OrdersPage() {
                 type="checkbox"
                 checked={includeClosed}
                 onChange={(e) => setIncludeClosed(e.target.checked)}
-                className="h-4 w-4 rounded border-stone-300 text-amber-600 focus:ring-amber-500 dark:border-stone-700"
+                className="h-4 w-4 rounded border-stone-300 text-stone-900 focus:ring-stone-500 dark:border-stone-700"
               />
               Include received &amp; cancelled
             </label>
@@ -107,7 +107,7 @@ export function OrdersPage() {
                     </div>
                     <div>
                       <p className="font-medium text-stone-400 dark:text-stone-500">Stage</p>
-                      <p className="text-amber-700 dark:text-amber-400">{stageLabel ?? "Not started"}</p>
+                      <p className="text-stone-900 dark:text-stone-100">{stageLabel ?? "Not started"}</p>
                     </div>
                     <div>
                       <p className="font-medium text-stone-400 dark:text-stone-500">Units</p>

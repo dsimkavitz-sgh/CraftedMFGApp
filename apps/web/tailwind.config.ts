@@ -3,10 +3,11 @@ import type { Config } from "tailwindcss";
 /**
  * Design tokens for Crafted MFG.
  *
- * - brand: amber accent (amber-600 primary, amber-500 hover)
- * - surfaces: stone scale (stone-50 bg / white cards light; stone-950 / stone-900 dark)
- * - semantic status colors: emerald (success/received), sky (in transit/ordered),
- *   amber (pending/in production), rose (error/exception/cancelled), stone (draft)
+ * Monochrome identity matching craftedmfg.com: white/stone surfaces, ink-black
+ * accent (inverts to white in dark mode), bold letter-spaced wordmarks.
+ * Semantic status colors stay colorful for scanability: emerald (success/
+ * received), sky (in transit/ordered), amber (pending/in production), rose
+ * (error/exception/cancelled), stone (draft).
  *
  * CSS variables live in src/app/globals.css so dark mode follows the OS
  * (darkMode: "media") without re-declaring palettes per component.
@@ -26,6 +27,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: [
+          "var(--font-sans)",
           "ui-sans-serif",
           "system-ui",
           "-apple-system",

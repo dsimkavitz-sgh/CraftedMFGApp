@@ -101,7 +101,7 @@ export function DashboardPage() {
             <StatCard
               label="In-transit shipments"
               value={state.data.inTransit}
-              accent="text-amber-600 dark:text-amber-400"
+              accent="text-stone-900 dark:text-stone-100"
             />
           </div>
 
@@ -111,7 +111,7 @@ export function DashboardPage() {
                 <h2 className="text-sm font-semibold tracking-tight text-stone-900 dark:text-stone-100">
                   Low stock (under {LOW_STOCK_THRESHOLD})
                 </h2>
-                <Link href="/inventory" className="text-xs font-medium text-amber-700 hover:underline dark:text-amber-400">
+                <Link href="/inventory" className="text-xs font-medium text-stone-900 hover:underline dark:text-stone-100">
                   View inventory
                 </Link>
               </div>

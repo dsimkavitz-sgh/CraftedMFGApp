@@ -69,8 +69,8 @@ export function CatalogPage() {
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-amber-100 to-stone-200 dark:from-amber-950 dark:to-stone-800">
-                        <span className="text-4xl font-semibold text-amber-700/60 dark:text-amber-400/50">
+                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-stone-100 to-stone-300 dark:from-stone-900 dark:to-stone-700">
+                        <span className="text-4xl font-semibold text-stone-500/70 dark:text-stone-400/50">
                           {style.name.charAt(0).toUpperCase()}
                         </span>
                       </div>

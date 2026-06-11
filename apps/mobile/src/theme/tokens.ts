@@ -9,6 +9,8 @@ export interface Palette {
   muted: string;
   accent: string;
   accentPressed: string;
+  /** Text/icon color rendered on top of `accent` surfaces. */
+  accentInk: string;
   success: string;
   info: string;
   warn: string;
@@ -22,6 +24,9 @@ const status = {
   danger: "#e11d48",
 } as const;
 
+// Monochrome identity matching craftedmfg.com: white/stone surfaces with an
+// ink-black accent that inverts to white in dark mode. Status colors stay
+// colorful for scanability.
 export const lightPalette: Palette = {
   isDark: false,
   bg: "#fafaf9",
@@ -29,8 +34,9 @@ export const lightPalette: Palette = {
   border: "#e7e5e4",
   text: "#1c1917",
   muted: "#78716c",
-  accent: "#d97706",
-  accentPressed: "#b45309",
+  accent: "#1c1917",
+  accentPressed: "#44403c",
+  accentInk: "#ffffff",
   ...status,
 };
 
@@ -41,8 +47,9 @@ export const darkPalette: Palette = {
   border: "#292524",
   text: "#fafaf9",
   muted: "#a8a29e",
-  accent: "#d97706",
-  accentPressed: "#b45309",
+  accent: "#fafaf9",
+  accentPressed: "#d6d3d1",
+  accentInk: "#1c1917",
   ...status,
 };
 

@@ -42,10 +42,11 @@ export default function LoginScreen() {
     <Screen edges={["top", "bottom"]} keyboard>
       <View style={styles.container}>
         <View style={styles.brand}>
-          <View style={[styles.brandMark, { backgroundColor: tint(theme.accent) }]}>
-            <Text style={styles.brandGlyph}>🧢</Text>
+          {/* Circle-C + MFG mark, matching the craftedmfg.com wordmark. */}
+          <View style={[styles.brandMark, { backgroundColor: theme.accent }]}>
+            <Text style={[styles.brandGlyph, { color: theme.accentInk }]}>C</Text>
           </View>
-          <Text style={[styles.wordmark, { color: theme.text }]}>Crafted MFG</Text>
+          <Text style={[styles.wordmark, { color: theme.text }]}>CRAFTED MFG</Text>
           <Text style={[styles.tagline, { color: theme.muted }]}>
             Inventory · Orders · Catalog
           </Text>
@@ -112,18 +113,19 @@ const styles = StyleSheet.create({
   brandMark: {
     width: 84,
     height: 84,
-    borderRadius: radius.card,
+    borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: spacing(4),
   },
   brandGlyph: {
-    fontSize: 42,
+    fontSize: 44,
+    fontWeight: "900",
   },
   wordmark: {
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: "800",
-    letterSpacing: -0.5,
+    letterSpacing: 5,
   },
   tagline: {
     fontSize: 14,

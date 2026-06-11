@@ -84,7 +84,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             href={item.href}
             className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
               active
-                ? "bg-amber-600/10 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400"
+                ? "bg-stone-900/5 text-stone-900 dark:bg-stone-100/10 dark:text-stone-100"
                 : "text-stone-600 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-stone-800 dark:hover:text-stone-100"
             }`}
           >
@@ -99,7 +99,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const userMenu = (
     <div className="border-t border-stone-200 p-3 dark:border-stone-800">
       <div className="flex items-center gap-3 rounded-lg px-2 py-2">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-600 text-sm font-semibold text-white">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-stone-900 text-sm font-semibold text-white dark:bg-stone-100 dark:text-stone-900">
           {(profile?.full_name?.charAt(0) || profile?.email?.charAt(0) || "?").toUpperCase()}
         </div>
         <div className="min-w-0 flex-1">
@@ -125,20 +125,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   );
 
   const brand = (
-    <div className="flex items-center gap-2 px-5 py-5">
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-600 text-white">
-        <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
-          <path
-            d="M4 14c0-1 .6-2.4 2-3.5C6 7 8.5 5 12 5s6 2 6 5.5c1.4 1.1 2 2.5 2 3.5 0 1.6-1.6 2.5-3.5 2.5h-9C5.6 16.5 4 15.6 4 14Z"
-            stroke="currentColor"
-            strokeWidth="1.7"
-            strokeLinejoin="round"
-          />
-          <path d="M8 18.5v.5M16 18.5v.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-        </svg>
+    // Circle-C + MFG mark, matching the craftedmfg.com wordmark.
+    <div className="flex items-center gap-2.5 px-5 py-5">
+      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-stone-900 text-white dark:bg-stone-100 dark:text-stone-900">
+        <span className="text-[17px] font-black leading-none">C</span>
       </div>
-      <span className="text-base font-semibold tracking-tight text-stone-900 dark:text-stone-100">
-        Crafted MFG
+      <span className="text-base font-extrabold uppercase tracking-[0.18em] text-stone-900 dark:text-stone-100">
+        MFG
       </span>
     </div>
   );

@@ -46,19 +46,12 @@ export default function LoginPage() {
     <div className="flex min-h-dvh items-center justify-center bg-stone-50 px-4 dark:bg-stone-950">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-600 text-white shadow-sm">
-            <svg viewBox="0 0 24 24" fill="none" className="h-7 w-7" aria-hidden="true">
-              <path
-                d="M4 14c0-1 .6-2.4 2-3.5C6 7 8.5 5 12 5s6 2 6 5.5c1.4 1.1 2 2.5 2 3.5 0 1.6-1.6 2.5-3.5 2.5h-9C5.6 16.5 4 15.6 4 14Z"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                strokeLinejoin="round"
-              />
-              <path d="M8 18.5v.5M16 18.5v.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-            </svg>
+          {/* Circle-C + MFG mark, matching the craftedmfg.com wordmark. */}
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-stone-900 text-white shadow-sm dark:bg-stone-100 dark:text-stone-900">
+            <span className="text-2xl font-black leading-none">C</span>
           </div>
           <div className="text-center">
-            <h1 className="text-xl font-semibold tracking-tight text-stone-900 dark:text-stone-100">
+            <h1 className="text-xl font-extrabold uppercase tracking-[0.22em] text-stone-900 dark:text-stone-100">
               Crafted MFG
             </h1>
             <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">Sign in to your workspace</p>

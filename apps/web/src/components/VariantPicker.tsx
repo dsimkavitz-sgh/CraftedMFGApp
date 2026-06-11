@@ -62,7 +62,7 @@ export function VariantPicker({
             setQuery("");
             setOpen(true);
           }}
-          className="shrink-0 text-xs font-medium text-amber-700 hover:underline dark:text-amber-400"
+          className="shrink-0 text-xs font-medium text-stone-900 hover:underline dark:text-stone-100"
         >
           Change
         </button>
@@ -85,7 +85,7 @@ export function VariantPicker({
           // Delay so option clicks register before the list unmounts.
           setTimeout(() => setOpen(false), 150);
         }}
-        className={`w-full rounded-lg border bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:bg-stone-900 dark:text-stone-100 ${
+        className={`w-full rounded-lg border bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-stone-500 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:bg-stone-900 dark:text-stone-100 ${
           error ? "border-rose-500" : "border-stone-300 dark:border-stone-700"
         }`}
       />

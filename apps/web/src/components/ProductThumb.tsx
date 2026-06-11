@@ -2,7 +2,7 @@
 
 /** Deterministic placeholder swatch color from a string (style/SKU name). */
 const SWATCHES = [
-  "bg-amber-200 text-amber-700 dark:bg-amber-900 dark:text-amber-300",
+  "bg-stone-200 text-stone-600 dark:bg-stone-800 dark:text-stone-300",
   "bg-sky-200 text-sky-700 dark:bg-sky-900 dark:text-sky-300",
   "bg-emerald-200 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300",
   "bg-rose-200 text-rose-700 dark:bg-rose-900 dark:text-rose-300",

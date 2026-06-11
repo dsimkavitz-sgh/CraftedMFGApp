@@ -101,7 +101,7 @@ export function AdjustInventoryModal({
                 const n = Number.parseInt(e.target.value, 10);
                 setDelta(Number.isNaN(n) ? 0 : n);
               }}
-              className="w-24 rounded-lg border border-stone-300 bg-white px-3 py-2 text-center text-sm font-semibold text-stone-900 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
+              className="w-24 rounded-lg border border-stone-300 bg-white px-3 py-2 text-center text-sm font-semibold text-stone-900 focus:border-stone-500 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
               aria-label="Quantity change"
             />
             <Button variant="secondary" size="sm" aria-label="Increase" onClick={() => setDelta((d) => d + 1)}>

@@ -465,7 +465,7 @@ export function OrderDetailPage({ poId }: { poId: string }) {
                 <ol className="flex flex-col gap-3">
                   {history.map((event) => (
                     <li key={event.id} className="flex gap-3">
-                      <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-amber-600" />
+                      <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-stone-900 dark:bg-stone-100" />
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-stone-800 dark:text-stone-200">
                           {isManufacturingStage(event.stage) ? STAGE_LABELS[event.stage] : event.stage}
@@ -577,7 +577,7 @@ export function OrderDetailPage({ poId }: { poId: string }) {
                         href={carrierTrackingUrl(shipment.carrier, shipment.tracking_number)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="ml-auto text-xs font-medium text-amber-700 hover:underline dark:text-amber-400"
+                        className="ml-auto text-xs font-medium text-stone-900 hover:underline dark:text-stone-100"
                       >
                         Track on {CARRIER_LABELS[shipment.carrier]} ↗
                       </a>
@@ -593,7 +593,7 @@ export function OrderDetailPage({ poId }: { poId: string }) {
                           disabled={shipmentBusyId === shipment.id}
                           onChange={(e) => void setShipmentStatus(shipment, e.target.value)}
                           aria-label="Shipment status"
-                          className="rounded-lg border border-stone-300 bg-white px-2 py-1.5 text-xs text-stone-700 focus:border-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-300"
+                          className="rounded-lg border border-stone-300 bg-white px-2 py-1.5 text-xs text-stone-700 focus:border-stone-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-300"
                         >
                           {SHIPMENT_STATUSES.map((s) => (
                             <option key={s} value={s}>

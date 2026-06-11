@@ -73,7 +73,7 @@ export function PhotoUpload({
         }}
         className={`flex cursor-pointer items-center gap-4 rounded-xl border-2 border-dashed p-4 transition-colors ${
           dragOver
-            ? "border-amber-500 bg-amber-50 dark:bg-amber-950/40"
+            ? "border-stone-900 bg-stone-100 dark:border-stone-100 dark:bg-stone-800/60"
             : "border-stone-300 hover:border-stone-400 dark:border-stone-700 dark:hover:border-stone-600"
         }`}
       >
