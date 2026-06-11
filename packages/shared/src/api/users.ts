@@ -30,6 +30,20 @@ export async function setUserRole(
   if (error) throw error;
 }
 
+/**
+ * Admin only. Sends a Supabase invite email; the new user sets a password via
+ * the link and lands in public.users with the requested role.
+ */
+export async function inviteUser(
+  supabase: SupabaseClient,
+  input: { email: string; full_name: string; role: UserRole },
+): Promise<void> {
+  const { data, error } = await supabase.functions.invoke("invite-user", { body: input });
+  if (error) throw error;
+  const result = data as { ok?: boolean; error?: string };
+  if (!result.ok) throw new Error(result.error ?? "Invite failed");
+}
+
 export const can = {
   manageUsers: (role: UserRole | null | undefined) => role === "admin",
   editCatalog: (role: UserRole | null | undefined) => role === "admin" || role === "manager",

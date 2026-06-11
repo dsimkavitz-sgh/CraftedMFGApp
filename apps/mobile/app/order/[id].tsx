@@ -19,7 +19,9 @@ import {
   recordStageEvent,
   shipmentSchema,
   stageEventSchema,
+  receivePurchaseOrder,
   sumQty,
+  syncInventoryToQbo,
   updateShipment,
   type Carrier,
   type ManufacturingStage,
@@ -342,6 +344,33 @@ export default function PurchaseOrderDetailScreen() {
     );
   };
 
+  const confirmReceive = () => {
+    Alert.alert(
+      "Receive into stock?",
+      `${po.po_number} will be marked received and ${sumQty(po.line_items)} units (${po.line_items.length} line items) will be added to on-hand inventory.`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Receive",
+          onPress: () => {
+            void (async () => {
+              try {
+                const result = await receivePurchaseOrder(supabase, po.id);
+                // Fire-and-forget QBO pushes; failures surface in the admin sync log.
+                for (const id of result.sync_log_ids) {
+                  void syncInventoryToQbo(supabase, id).catch(() => undefined);
+                }
+                void state.reload();
+              } catch (e) {
+                Alert.alert("Could not receive PO", errorMessage(e));
+              }
+            })();
+          },
+        },
+      ],
+    );
+  };
+
   return (
     <Screen
       refreshControl={
@@ -382,6 +411,11 @@ export default function PurchaseOrderDetailScreen() {
         </View>
         {po.notes ? (
           <Text style={[styles.notes, { color: theme.muted }]}>{po.notes}</Text>
+        ) : null}
+        {canManage && po.status !== "received" && po.status !== "cancelled" ? (
+          <View style={styles.receiveWrap}>
+            <Button title="Receive into stock" onPress={confirmReceive} />
+          </View>
         ) : null}
       </Card>
 
@@ -567,6 +601,9 @@ const styles = StyleSheet.create({
   supplier: {
     fontSize: 15,
     marginTop: 2,
+  },
+  receiveWrap: {
+    marginTop: spacing(3),
   },
   headerMeta: {
     flexDirection: "row",

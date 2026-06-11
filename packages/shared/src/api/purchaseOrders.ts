@@ -83,6 +83,26 @@ export async function replaceLineItems(
   if (error) throw error;
 }
 
+export interface ReceivePoResult {
+  received_items: number;
+  /** qbo_sync_log rows queued by the RPC; pass each to syncInventoryToQbo. */
+  sync_log_ids: string[];
+}
+
+/**
+ * Atomically marks the PO received and adds every line item qty to inventory
+ * (audit rows + QBO sync queue included) via the receive_purchase_order RPC.
+ * Admin/manager only — enforced in the database.
+ */
+export async function receivePurchaseOrder(
+  supabase: SupabaseClient,
+  poId: string,
+): Promise<ReceivePoResult> {
+  const { data, error } = await supabase.rpc("receive_purchase_order", { p_po_id: poId });
+  if (error) throw error;
+  return data as ReceivePoResult;
+}
+
 /** Latest stage event per PO = the PO's current manufacturing stage. */
 export function currentStage(po: PurchaseOrderWithRelations): string | null {
   if (!po.stage_events.length) return null;

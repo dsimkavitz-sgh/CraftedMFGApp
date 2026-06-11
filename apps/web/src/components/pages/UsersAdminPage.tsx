@@ -5,6 +5,7 @@ import {
   ROLE_LABELS,
   USER_ROLES,
   formatDate,
+  inviteUser,
   listUsers,
   setUserRole,
   type UserRole,
@@ -12,7 +13,9 @@ import {
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { errorMessage, useAsync } from "@/lib/useAsync";
 import { useProfile } from "@/components/providers";
+import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { Input, Select } from "@/components/ui/Input";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { LoadingBlock } from "@/components/ui/Spinner";
 import { ErrorAlert } from "@/components/ui/Alert";
@@ -25,6 +28,38 @@ export function UsersAdminPage() {
 
   const [actionError, setActionError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
+
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteName, setInviteName] = useState("");
+  const [inviteRole, setInviteRole] = useState<UserRole>("warehouse");
+  const [inviting, setInviting] = useState(false);
+  const [inviteNotice, setInviteNotice] = useState<string | null>(null);
+
+  async function sendInvite() {
+    setActionError(null);
+    setInviteNotice(null);
+    if (!/^\S+@\S+\.\S+$/.test(inviteEmail.trim())) {
+      setActionError("Enter a valid email address to invite.");
+      return;
+    }
+    setInviting(true);
+    try {
+      await inviteUser(supabase, {
+        email: inviteEmail.trim(),
+        full_name: inviteName.trim(),
+        role: inviteRole,
+      });
+      setInviteNotice(`Invite sent to ${inviteEmail.trim()} — they'll set a password via the email link.`);
+      setInviteEmail("");
+      setInviteName("");
+      setInviteRole("warehouse");
+      state.reload();
+    } catch (e) {
+      setActionError(errorMessage(e));
+    } finally {
+      setInviting(false);
+    }
+  }
 
   async function changeRole(userId: string, fullName: string, role: UserRole) {
     if (!window.confirm(`Change ${fullName}'s role to ${ROLE_LABELS[role]}?`)) {
@@ -48,10 +83,49 @@ export function UsersAdminPage() {
     <div>
       <PageHeader title="Users" subtitle="Who can sign in, and what they can do." />
 
-      <div className="mb-4 rounded-xl border border-sky-200 bg-sky-50 p-4 text-sm text-sky-800 dark:border-sky-900 dark:bg-sky-950/50 dark:text-sky-300">
-        New users are invited via the Supabase dashboard in the MVP (Authentication → Users →
-        Invite). Once they sign in, manage their role here.
-      </div>
+      <Card className="mb-4">
+        <h2 className="mb-3 text-sm font-semibold text-stone-900 dark:text-stone-100">
+          Invite a team member
+        </h2>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+          <div className="flex-1">
+            <Input
+              label="Email"
+              type="email"
+              value={inviteEmail}
+              onChange={(e) => setInviteEmail(e.target.value)}
+              placeholder="name@craftedmfg.com"
+            />
+          </div>
+          <div className="flex-1">
+            <Input
+              label="Full name"
+              value={inviteName}
+              onChange={(e) => setInviteName(e.target.value)}
+              placeholder="First Last"
+            />
+          </div>
+          <div className="w-full sm:w-44">
+            <Select
+              label="Role"
+              value={inviteRole}
+              onChange={(e) => setInviteRole(e.target.value as UserRole)}
+            >
+              {USER_ROLES.map((r) => (
+                <option key={r} value={r}>
+                  {ROLE_LABELS[r]}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <Button onClick={() => void sendInvite()} loading={inviting}>
+            Send invite
+          </Button>
+        </div>
+        {inviteNotice ? (
+          <p className="mt-3 text-sm text-emerald-700 dark:text-emerald-400">{inviteNotice}</p>
+        ) : null}
+      </Card>
 
       {actionError ? (
         <div className="mb-4">

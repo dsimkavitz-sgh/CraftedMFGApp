@@ -23,13 +23,17 @@ app (Expo / React Native) and a responsive web app (Next.js).
   (sampling → production → qc → ready_to_ship → shipped → delivered) with full
   who/when history and a visual stepper. Pipeline is configurable in
   `packages/shared/src/constants/stages.ts`.
-- **Shipments (basic)** — carrier (UPS/DHL), tracking number, manual status,
-  ETA, deep link to the carrier tracking page.
+- **Shipments (basic)** — carrier (UPS/FedEx/DHL), tracking number, manual
+  status, ETA, deep link to the carrier tracking page.
+- **Receive into stock** — one tap marks a PO received and adds all line-item
+  quantities to inventory (audited + QBO-queued).
+- **Barcode scanning** — print Code128 SKU labels from the web app; scan them
+  with the phone camera to jump straight to a variant.
+- **User invites** — admins invite staff by email from the web admin.
 
-**Phase 2 (scaffolded, not built):** live UPS/DHL tracking polling
+**Phase 2 (scaffolded, not built):** live UPS/FedEx/DHL tracking polling
 (`supabase/functions/track-shipments`), push notifications (token registration
-ships now; sending later), barcode scanning (schema + lookup hook exist; scan
-UI stubbed). **Phase 3 (noted only):** patch product line (supplier `type`
+ships now; sending later). **Phase 3 (noted only):** patch product line (supplier `type`
 already supports `patch_manufacturer`), reporting, multi-warehouse.
 
 ## Repo layout

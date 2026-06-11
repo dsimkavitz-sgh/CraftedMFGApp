@@ -25,8 +25,10 @@ import {
   listSuppliers,
   nextStage,
   purchaseOrderSchema,
+  receivePurchaseOrder,
   recordStageEvent,
   shipmentSchema,
+  syncInventoryToQbo,
   stageEventSchema,
   sumQty,
   updatePurchaseOrder,
@@ -283,6 +285,8 @@ export function OrderDetailPage({ poId }: { poId: string }) {
   }, [poId]);
 
   const [editOpen, setEditOpen] = useState(false);
+  const [receiving, setReceiving] = useState(false);
+  const [receiveError, setReceiveError] = useState<string | null>(null);
   const [stageNote, setStageNote] = useState("");
   const [jumpStage, setJumpStage] = useState<"" | ManufacturingStage>("");
   const [stageError, setStageError] = useState<string | null>(null);
@@ -321,6 +325,31 @@ export function OrderDetailPage({ poId }: { poId: string }) {
       setStageError(errorMessage(e));
     } finally {
       setRecordingStage(false);
+    }
+  }
+
+  async function receiveIntoStock() {
+    if (!po) return;
+    const totalUnits = sumQty(po.line_items);
+    if (
+      !window.confirm(
+        `Mark ${po.po_number} as received and add ${totalUnits} units (${po.line_items.length} line items) to on-hand inventory?`,
+      )
+    )
+      return;
+    setReceiveError(null);
+    setReceiving(true);
+    try {
+      const result = await receivePurchaseOrder(supabase, po.id);
+      // Fire-and-forget QBO pushes; failures surface in the admin sync log.
+      for (const id of result.sync_log_ids) {
+        void syncInventoryToQbo(supabase, id).catch(() => undefined);
+      }
+      state.reload();
+    } catch (e) {
+      setReceiveError(errorMessage(e));
+    } finally {
+      setReceiving(false);
     }
   }
 
@@ -389,11 +418,21 @@ export function OrderDetailPage({ poId }: { poId: string }) {
                 ) : null}
               </div>
               {can.editPurchaseOrders(role) ? (
-                <Button variant="secondary" size="sm" onClick={() => setEditOpen(true)}>
-                  Edit PO
-                </Button>
+                <div className="flex shrink-0 gap-2">
+                  {po.status !== "received" && po.status !== "cancelled" ? (
+                    <Button size="sm" onClick={() => void receiveIntoStock()} loading={receiving}>
+                      Receive into stock
+                    </Button>
+                  ) : null}
+                  <Button variant="secondary" size="sm" onClick={() => setEditOpen(true)}>
+                    Edit PO
+                  </Button>
+                </div>
               ) : null}
             </div>
+            {receiveError ? (
+              <p className="mt-3 text-sm text-rose-600 dark:text-rose-400">{receiveError}</p>
+            ) : null}
           </Card>
 
           {/* Manufacturing stage */}
