@@ -35,8 +35,10 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const isLoginRoute = request.nextUrl.pathname === "/login";
+  // Email-link landing flow (invite / password reset) must work signed-out.
+  const isAuthRoute = request.nextUrl.pathname.startsWith("/auth/");
 
-  if (!user && !isLoginRoute) {
+  if (!user && !isLoginRoute && !isAuthRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.search = "";

@@ -2,6 +2,7 @@
 
 import { BrandWordmark } from "@/components/BrandWordmark";
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signInSchema } from "@crafted/shared";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
@@ -81,6 +82,12 @@ export default function LoginPage() {
           <Button type="submit" loading={submitting} className="w-full">
             Sign in
           </Button>
+          <Link
+            href="/auth/forgot"
+            className="text-center text-sm font-medium text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200"
+          >
+            Forgot password?
+          </Link>
           <p className="text-center text-xs text-stone-400 dark:text-stone-500">
             Accounts are created by an administrator — no self-signup.
           </p>
