@@ -1,7 +1,9 @@
 import { uploadProductPhoto } from "@crafted/shared";
 import { Ionicons } from "@expo/vector-icons";
 import { decode } from "base64-arraybuffer";
-import * as FileSystem from "expo-file-system";
+// SDK 54: the callback-style API (readAsStringAsync) lives in /legacy;
+// the new File/Directory API is the default export.
+import * as FileSystem from "expo-file-system/legacy";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
